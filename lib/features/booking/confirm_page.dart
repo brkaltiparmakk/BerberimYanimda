@@ -27,6 +27,7 @@ class _ConfirmBookingPageState extends ConsumerState<ConfirmBookingPage> {
   Future<void> _load() async {
     final booking = ref.read(bookingProvider);
     if (booking.businessId == null || booking.services.isEmpty) {
+      if (!mounted) return;
       setState(() => _loading = false);
       return;
     }
@@ -35,6 +36,7 @@ class _ConfirmBookingPageState extends ConsumerState<ConfirmBookingPage> {
     query.eq('business_id', booking.businessId);
     query.in_('id', booking.services.toList());
     final response = await query;
+    if (!mounted) return;
     final services = response
         .map(
           (json) => ServiceModel(
