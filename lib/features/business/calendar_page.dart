@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -14,6 +16,7 @@ class BusinessCalendarPage extends ConsumerStatefulWidget {
 }
 
 class _BusinessCalendarPageState extends ConsumerState<BusinessCalendarPage> {
+  StreamSubscription<List<Appointment>>? _appointmentsSubscription;
   String? _businessId;
   List<Appointment> _appointments = const [];
   bool _loading = true;
@@ -25,6 +28,8 @@ class _BusinessCalendarPageState extends ConsumerState<BusinessCalendarPage> {
   }
 
   Future<void> _load() async {
+    await _appointmentsSubscription?.cancel();
+    _appointmentsSubscription = null;
     final profile = await ref.read(supabaseClientProvider)
         .from('profiles')
         .select<Map<String, dynamic>>('default_business_id')
@@ -41,9 +46,15 @@ class _BusinessCalendarPageState extends ConsumerState<BusinessCalendarPage> {
       _appointments = data;
       _loading = false;
     });
-    repo.watchAppointments(businessId).listen((event) {
+    _appointmentsSubscription = repo.watchAppointments(businessId).listen((event) {
       setState(() => _appointments = event);
     });
+  }
+
+  @override
+  void dispose() {
+    _appointmentsSubscription?.cancel();
+    super.dispose();
   }
 
   @override
