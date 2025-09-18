@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -17,6 +19,7 @@ class _BusinessCalendarPageState extends ConsumerState<BusinessCalendarPage> {
   String? _businessId;
   List<Appointment> _appointments = const [];
   bool _loading = true;
+  StreamSubscription<List<Appointment>>? _subscription;
 
   @override
   void initState() {
@@ -31,19 +34,28 @@ class _BusinessCalendarPageState extends ConsumerState<BusinessCalendarPage> {
         .maybeSingle();
     final businessId = profile?['default_business_id'] as String?;
     if (businessId == null) {
+      if (!mounted) return;
       setState(() => _loading = false);
       return;
     }
     final repo = ref.read(appointmentRepositoryProvider);
     final data = await repo.fetchAppointments(businessId: businessId);
+    if (!mounted) return;
     setState(() {
       _businessId = businessId;
       _appointments = data;
       _loading = false;
     });
-    repo.watchAppointments(businessId).listen((event) {
+    _subscription = repo.watchAppointments(businessId).listen((event) {
+      if (!mounted) return;
       setState(() => _appointments = event);
     });
+  }
+
+  @override
+  void dispose() {
+    _subscription?.cancel();
+    super.dispose();
   }
 
   @override
