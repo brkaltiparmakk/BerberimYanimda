@@ -25,10 +25,13 @@ class _MapPageState extends ConsumerState<MapPage> {
 
   Future<void> _load() async {
     final position = await _locationService.getCurrentPosition();
-    if (position != null) {
-      _initialPosition = LatLng(position.latitude, position.longitude);
-    }
-    setState(() => _loading = false);
+    if (!mounted) return;
+    setState(() {
+      if (position != null) {
+        _initialPosition = LatLng(position.latitude, position.longitude);
+      }
+      _loading = false;
+    });
   }
 
   @override
