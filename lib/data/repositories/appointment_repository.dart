@@ -10,15 +10,18 @@ class AppointmentRepository {
   final SupabaseClient _client;
 
   Future<List<Appointment>> fetchAppointments({String? businessId}) async {
-    var response = await _client
+    final query = _client
         .from('appointments')
         .select<List<Map<String, dynamic>>>(
           'id, business_id, customer_id, staff_id, status, total_amount, scheduled_at, services, payment_status',
         )
         .order('scheduled_at', ascending: false);
+
     if (businessId != null) {
-      response = response.where((row) => row['business_id'] == businessId).toList();
+      query.eq('business_id', businessId);
     }
+
+    final response = await query;
     return response.map(Appointment.fromJson).toList();
   }
 
