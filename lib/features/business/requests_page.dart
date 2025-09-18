@@ -30,11 +30,13 @@ class _BusinessRequestsPageState extends ConsumerState<BusinessRequestsPage> {
         .maybeSingle();
     final businessId = profile?['default_business_id'] as String?;
     if (businessId == null) {
+      if (!mounted) return;
       setState(() => _loading = false);
       return;
     }
     final repo = ref.read(appointmentRepositoryProvider);
     final data = await repo.fetchAppointments(businessId: businessId);
+    if (!mounted) return;
     setState(() {
       _businessId = businessId;
       _requests = data.where((appointment) => appointment.status == 'pending').toList();
@@ -45,6 +47,7 @@ class _BusinessRequestsPageState extends ConsumerState<BusinessRequestsPage> {
   Future<void> _updateStatus(Appointment appointment, String status) async {
     final client = ref.read(supabaseClientProvider);
     await client.from('appointments').update({'status': status}).eq('id', appointment.id);
+    if (!mounted) return;
     setState(() {
       _requests = _requests.where((item) => item.id != appointment.id).toList();
     });

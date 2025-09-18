@@ -44,6 +44,7 @@ class _BusinessDetailPageState extends ConsumerState<BusinessDetailPage> {
         .order('created_at', ascending: false)
         .limit(20);
 
+    if (!mounted) return;
     setState(() {
       _business = business == null
           ? null
