@@ -15,6 +15,7 @@ import '../data/repositories/promotion_repository.dart';
 import '../data/repositories/storage_repository.dart';
 import '../data/services/notifications_service.dart';
 import '../data/services/supabase_client.dart';
+import 'availability_utils.dart';
 
 final supabaseClientProvider = Provider<SupabaseClient>((ref) => SupabaseService.client);
 
@@ -215,10 +216,7 @@ final availabilityProvider = FutureProvider.family<List<DateTime>, AvailabilityP
       .map((appointment) {
         final start = DateTime.parse(appointment['scheduled_at'] as String).toLocal();
         final duration = Duration(minutes: appointment['duration_minutes'] as int? ?? 30);
-        return List<DateTime>.generate(
-          duration.inMinutes ~/ 30,
-          (index) => start.add(Duration(minutes: 30 * index)),
-        );
+        return generateOccupiedSlots(start, duration);
       })
       .expand((element) => element)
       .toSet();
