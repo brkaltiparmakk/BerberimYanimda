@@ -21,10 +21,24 @@ class _ReportsPageState extends ConsumerState<ReportsPage> {
   }
 
   Future<void> _load() async {
-    final profile = await ref.read(supabaseClientProvider)
+    final client = ref.read(supabaseClientProvider);
+    final userId = client.auth.currentUser?.id;
+    if (userId == null) {
+      if (!mounted) {
+        return;
+      }
+      setState(() => _businessId = null);
+      return;
+    }
+
+    final profile = await client
         .from('profiles')
         .select<Map<String, dynamic>>('default_business_id')
+        .eq('id', userId)
         .maybeSingle();
+    if (!mounted) {
+      return;
+    }
     setState(() => _businessId = profile?['default_business_id'] as String?);
   }
 
