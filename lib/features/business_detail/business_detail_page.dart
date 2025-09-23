@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../data/models/service.dart';
 import '../../state/providers.dart';
+import '../../widgets/atoms/primary_button.dart';
 import '../../widgets/molecules/empty_state.dart';
 import 'reviews_list.dart';
 import 'services_list.dart';
@@ -23,6 +24,7 @@ class _BusinessDetailPageState extends ConsumerState<BusinessDetailPage> {
   Map<String, dynamic>? _business;
   List<ServiceModel> _services = const [];
   List<Map<String, dynamic>> _reviews = const [];
+  String? _errorMessage;
 
   @override
   void initState() {
@@ -31,44 +33,65 @@ class _BusinessDetailPageState extends ConsumerState<BusinessDetailPage> {
   }
 
   Future<void> _load() async {
+    setState(() {
+      _loading = true;
+      _errorMessage = null;
+    });
+
     final repo = ref.read(businessRepositoryProvider);
     final client = ref.read(supabaseClientProvider);
-    final business = await repo.getBusiness(widget.businessId);
-    final services = await repo.fetchServices(widget.businessId);
-    final reviews = await client
-        .from('reviews')
-        .select<List<Map<String, dynamic>>>(
-          'id, comment, rating, created_at, appointments(customer_id), customer_id, customer:profiles(full_name)',
-        )
-        .eq('business_id', widget.businessId)
-        .order('created_at', ascending: false)
-        .limit(20);
 
-    if (!mounted) return;
-    setState(() {
-      _business = business == null
-          ? null
-          : {
-              'id': business.id,
-              'name': business.name,
-              'description': business.description,
-              'address': business.address,
-              'cover_image_url': business.coverImageUrl,
-              'open_hours': business.openHours,
-              'average_rating': business.averageRating,
-              'review_count': business.reviewCount,
-            };
-      _services = services;
-      _reviews = reviews
-          .map((item) => {
-                'id': item['id'],
-                'comment': item['comment'],
-                'rating': item['rating'],
-                'customer_name': (item['customer'] as Map?)?['full_name'] ?? 'Müşteri',
-              })
-          .toList();
-      _loading = false;
-    });
+    try {
+      final businessFuture = repo.getBusiness(widget.businessId);
+      final servicesFuture = repo.fetchServices(widget.businessId);
+      final reviewsFuture = client
+          .from('reviews')
+          .select<List<Map<String, dynamic>>>(
+            'id, comment, rating, created_at, appointments(customer_id), customer_id, customer:profiles(full_name)',
+          )
+          .eq('business_id', widget.businessId)
+          .order('created_at', ascending: false)
+          .limit(20);
+
+      final business = await businessFuture;
+      final services = await servicesFuture;
+      final reviews = await reviewsFuture;
+
+      if (!mounted) return;
+      setState(() {
+        _business = business == null
+            ? null
+            : {
+                'id': business.id,
+                'name': business.name,
+                'description': business.description,
+                'address': business.address,
+                'cover_image_url': business.coverImageUrl,
+                'open_hours': business.openHours,
+                'average_rating': business.averageRating,
+                'review_count': business.reviewCount,
+              };
+        _services = services;
+        _reviews = reviews
+            .map((item) => {
+                  'id': item['id'],
+                  'comment': item['comment'],
+                  'rating': item['rating'],
+                  'customer_name': (item['customer'] as Map?)?['full_name'] ?? 'Müşteri',
+                })
+            .toList();
+        _loading = false;
+      });
+    } catch (error, _) {
+      if (!mounted) return;
+      setState(() {
+        _loading = false;
+        _business = null;
+        _services = const [];
+        _reviews = const [];
+        _errorMessage = 'İşletme bilgileri yüklenemedi. Lütfen tekrar deneyin.';
+      });
+    }
   }
 
   void _onSelectService(ServiceModel service) {
@@ -81,6 +104,20 @@ class _BusinessDetailPageState extends ConsumerState<BusinessDetailPage> {
   Widget build(BuildContext context) {
     if (_loading) {
       return const Scaffold(body: Center(child: CircularProgressIndicator()));
+    }
+
+    if (_errorMessage != null) {
+      return Scaffold(
+        body: EmptyState(
+          icon: Icons.error_outline,
+          message: _errorMessage!,
+          action: PrimaryButton(
+            onPressed: _load,
+            label: 'Tekrar Dene',
+            icon: Icons.refresh,
+          ),
+        ),
+      );
     }
 
     if (_business == null) {
