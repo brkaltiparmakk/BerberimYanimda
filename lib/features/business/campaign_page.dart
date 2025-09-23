@@ -24,18 +24,40 @@ class _CampaignPageState extends ConsumerState<CampaignPage> {
   }
 
   Future<void> _load() async {
-    final profile = await ref.read(supabaseClientProvider)
-        .from('profiles')
-        .select<Map<String, dynamic>>('default_business_id')
-        .maybeSingle();
-    final businessId = profile?['default_business_id'] as String?;
-    if (businessId == null) {
+    final client = ref.read(supabaseClientProvider);
+    final userId = client.auth.currentUser?.id;
+    if (userId == null) {
+      if (!mounted) {
+        return;
+      }
       setState(() => _loading = false);
       return;
     }
-    final promotions = await ref.read(supabaseClientProvider).from('promotions').select<List<Map<String, dynamic>>>()
-      ..eq('business_id', businessId)
-      ..order('created_at', ascending: false);
+
+    final profile = await client
+        .from('profiles')
+        .select<Map<String, dynamic>>('default_business_id')
+        .eq('id', userId)
+        .maybeSingle();
+    final businessId = profile?['default_business_id'] as String?;
+    if (businessId == null) {
+      if (!mounted) {
+        return;
+      }
+      setState(() => _loading = false);
+      return;
+    }
+
+    final promotions = await client
+        .from('promotions')
+        .select<List<Map<String, dynamic>>>(
+          'id, business_id, title, discount_rate, start_date, end_date, active, description',
+        )
+        .eq('business_id', businessId)
+        .order('created_at', ascending: false);
+    if (!mounted) {
+      return;
+    }
     setState(() {
       _businessId = businessId;
       _promotions = promotions

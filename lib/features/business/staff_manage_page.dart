@@ -24,16 +24,32 @@ class _StaffManagePageState extends ConsumerState<StaffManagePage> {
   }
 
   Future<void> _load() async {
-    final profile = await ref.read(supabaseClientProvider)
+    final client = ref.read(supabaseClientProvider);
+    final userId = client.auth.currentUser?.id;
+    if (userId == null) {
+      if (!mounted) {
+        return;
+      }
+      setState(() => _loading = false);
+      return;
+    }
+    final profile = await client
         .from('profiles')
         .select<Map<String, dynamic>>('default_business_id')
+        .eq('id', userId)
         .maybeSingle();
     final businessId = profile?['default_business_id'] as String?;
     if (businessId == null) {
+      if (!mounted) {
+        return;
+      }
       setState(() => _loading = false);
       return;
     }
     final staff = await ref.read(businessRepositoryProvider).fetchStaff(businessId);
+    if (!mounted) {
+      return;
+    }
     setState(() {
       _businessId = businessId;
       _staff = staff;

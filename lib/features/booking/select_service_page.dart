@@ -28,6 +28,9 @@ class _SelectServicePageState extends ConsumerState<SelectServicePage> {
 
   Future<void> _load() async {
     final services = await ref.read(businessRepositoryProvider).fetchServices(widget.businessId);
+    if (!mounted) {
+      return;
+    }
     setState(() {
       _services = services;
       _loading = false;

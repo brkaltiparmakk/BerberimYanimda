@@ -24,17 +24,33 @@ class _ServiceManagePageState extends ConsumerState<ServiceManagePage> {
   }
 
   Future<void> _load() async {
-    final profile = await ref.read(supabaseClientProvider)
+    final client = ref.read(supabaseClientProvider);
+    final userId = client.auth.currentUser?.id;
+    if (userId == null) {
+      if (!mounted) {
+        return;
+      }
+      setState(() => _loading = false);
+      return;
+    }
+    final profile = await client
         .from('profiles')
         .select<Map<String, dynamic>>('default_business_id')
+        .eq('id', userId)
         .maybeSingle();
     final businessId = profile?['default_business_id'] as String?;
     if (businessId == null) {
+      if (!mounted) {
+        return;
+      }
       setState(() => _loading = false);
       return;
     }
     final repo = ref.read(businessRepositoryProvider);
     final services = await repo.fetchServices(businessId);
+    if (!mounted) {
+      return;
+    }
     setState(() {
       _businessId = businessId;
       _services = services;

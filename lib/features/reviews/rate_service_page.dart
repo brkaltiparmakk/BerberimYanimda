@@ -29,28 +29,53 @@ class _RateServicePageState extends ConsumerState<RateServicePage> {
     setState(() => _submitting = true);
     final client = ref.read(supabaseClientProvider);
     final userId = client.auth.currentUser?.id;
-    if (userId == null) return;
-
-    final appointment = await client
-        .from('appointments')
-        .select<Map<String, dynamic>>('business_id')
-        .eq('id', widget.appointmentId)
-        .maybeSingle();
-    if (appointment == null) {
-      setState(() => _submitting = false);
+    if (userId == null) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Değerlendirme göndermek için lütfen giriş yapın.')),
+        );
+        setState(() => _submitting = false);
+      }
       return;
     }
 
-    await client.from('reviews').insert({
-      'appointment_id': widget.appointmentId,
-      'business_id': appointment['business_id'],
-      'customer_id': userId,
-      'rating': _rating.round(),
-      'comment': _commentCtrl.text,
-    });
-    if (mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Değerlendirmeniz için teşekkürler.')));
-      Navigator.of(context).pop();
+    try {
+      final appointment = await client
+          .from('appointments')
+          .select<Map<String, dynamic>>('business_id')
+          .eq('id', widget.appointmentId)
+          .maybeSingle();
+      if (appointment == null) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Randevu bilgisine ulaşılamadı.')),
+          );
+        }
+        return;
+      }
+
+      await client.from('reviews').insert({
+        'appointment_id': widget.appointmentId,
+        'business_id': appointment['business_id'],
+        'customer_id': userId,
+        'rating': _rating.round(),
+        'comment': _commentCtrl.text,
+      });
+      if (mounted) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(const SnackBar(content: Text('Değerlendirmeniz için teşekkürler.')));
+        Navigator.of(context).pop();
+      }
+    } catch (error) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Değerlendirme kaydedilemedi: $error')),
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() => _submitting = false);
+      }
     }
   }
 

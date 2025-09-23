@@ -33,6 +33,9 @@ class _CustomerHistoryPageState extends ConsumerState<CustomerHistoryPage> {
         )
         .eq('customer_id', widget.customerId)
         .order('scheduled_at', ascending: false);
+    if (!mounted) {
+      return;
+    }
     setState(() {
       _history = data;
       _loading = false;
