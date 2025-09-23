@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../data/models/appointment.dart';
 import '../../state/providers.dart';
+import '../../widgets/atoms/primary_button.dart';
 import '../../widgets/molecules/empty_state.dart';
 import 'appointment_card.dart';
 
@@ -51,29 +52,48 @@ class MyAppointmentsPage extends ConsumerWidget {
             );
           },
           loading: () => const Center(child: CircularProgressIndicator()),
-          error: (error, _) => Center(child: Text('Randevular yüklenemedi: $error')),
+          error: (error, _) => Center(
+            child: EmptyState(
+              icon: Icons.error_outline,
+              message: 'Randevular yüklenemedi. Lütfen tekrar deneyin.',
+              action: PrimaryButton(
+                onPressed: () => ref.read(appointmentsProvider.notifier).refresh(),
+                label: 'Tekrar Dene',
+                icon: Icons.refresh,
+              ),
+            ),
+          ),
         ),
       ),
     );
   }
 
   Widget _buildList(BuildContext context, WidgetRef ref, List<Appointment> items) {
-    if (items.isEmpty) {
-      return const EmptyState(icon: Icons.event_busy, message: 'Henüz randevunuz yok.');
-    }
-    return ListView.builder(
-      itemCount: items.length,
-      itemBuilder: (context, index) {
-        final appointment = items[index];
-        return AppointmentCard(
-          appointment: appointment,
-          onCancel: () async {
-            await ref.read(appointmentRepositoryProvider).cancelAppointment(appointment.id);
-            ref.read(appointmentsProvider.notifier).refresh();
-          },
-          onRate: () => context.go('/rate/${appointment.id}'),
-        );
-      },
+    return RefreshIndicator(
+      onRefresh: () => ref.read(appointmentsProvider.notifier).refresh(),
+      child: items.isEmpty
+          ? ListView(
+              physics: const AlwaysScrollableScrollPhysics(),
+              children: const [
+                SizedBox(height: 80),
+                EmptyState(icon: Icons.event_busy, message: 'Henüz randevunuz yok.'),
+              ],
+            )
+          : ListView.builder(
+              physics: const AlwaysScrollableScrollPhysics(),
+              itemCount: items.length,
+              itemBuilder: (context, index) {
+                final appointment = items[index];
+                return AppointmentCard(
+                  appointment: appointment,
+                  onCancel: () async {
+                    await ref.read(appointmentRepositoryProvider).cancelAppointment(appointment.id);
+                    ref.read(appointmentsProvider.notifier).refresh();
+                  },
+                  onRate: () => context.go('/rate/${appointment.id}'),
+                );
+              },
+            ),
     );
   }
 }

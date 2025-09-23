@@ -14,14 +14,24 @@ class PrimaryButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final style = ElevatedButton.styleFrom(
+      minimumSize: const Size.fromHeight(48),
+      elevation: 0,
+    );
+
+    if (icon == null) {
+      return ElevatedButton(
+        onPressed: onPressed,
+        style: style,
+        child: Text(label),
+      );
+    }
+
     return ElevatedButton.icon(
       onPressed: onPressed,
-      icon: icon != null ? Icon(icon) : const SizedBox.shrink(),
+      style: style,
+      icon: Icon(icon),
       label: Text(label),
-      style: ElevatedButton.styleFrom(
-        minimumSize: const Size.fromHeight(48),
-        elevation: 0,
-      ),
     );
   }
 }
