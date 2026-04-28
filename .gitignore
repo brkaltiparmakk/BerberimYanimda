@@ -1,0 +1,50 @@
+# Dependencies
+node_modules/
+.packages/
+packages/
+
+# Build outputs
+backend/src/**/bin/
+backend/src/**/obj/
+backend/tests/**/bin/
+backend/tests/**/obj/
+mobile/build/
+mobile/.dart_tool/
+mobile/android/.gradle/
+mobile/android/app/build/
+mobile/ios/Pods/
+mobile/ios/.symlinks/
+mobile/.flutter-plugins*
+
+# IDE
+.vs/
+.vscode/
+.idea/
+*.sln.DotSettings.user
+*.suo
+*.user
+*.userosscache
+*.userprefs
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment & secrets
+.env
+*.env
+appsettings.*.local.json
+**/secrets.json
+!appsettings.json
+!appsettings.Development.json
+
+# Test results
+backend/tests/**/TestResults/
+backend/tests/**/coverage/
+
+# Claude AI cache (local only)
+.claude/cache/
+
+# Flutter generated
+mobile/.flutter-plugins
+mobile/.flutter-plugins-dependencies

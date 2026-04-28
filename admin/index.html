@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Berber Yanımda — Admin Panel</title>
+  <style>
+    :root {
+      --bg-primary: #0B0B0D;
+      --bg-secondary: #111317;
+      --bg-card: #16181E;
+      --bg-input: #1A1D24;
+      --bg-hover: #1F222B;
+      --gold: #D6A84F;
+      --gold-hover: #e4b95c;
+      --gold-muted: rgba(214,168,79,.15);
+      --text-primary: #E8E8EC;
+      --text-secondary: #8E8E9A;
+      --text-muted: #5C5C6A;
+      --border: #1F222B;
+      --danger: #E74C3C;
+      --danger-hover: #c0392b;
+      --success: #27AE60;
+      --warning: #F39C12;
+      --radius: 10px;
+      --sidebar-w: 240px;
+      --shadow: 0 2px 12px rgba(0,0,0,.4);
+    }
+    * { margin:0; padding:0; box-sizing:border-box }
+    body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background: var(--bg-primary); color: var(--text-primary); min-height: 100vh }
+    input, button { font-family: inherit; font-size: inherit }
+    ::-webkit-scrollbar { width: 6px }
+    ::-webkit-scrollbar-track { background: var(--bg-secondary) }
+    ::-webkit-scrollbar-thumb { background: var(--bg-hover); border-radius: 3px }
+
+    /* Layout */
+    .app { display: flex; min-height: 100vh }
+    .sidebar { width: var(--sidebar-w); background: var(--bg-secondary); border-right: 1px solid var(--border); display: flex; flex-direction: column; position: fixed; top:0; left:0; bottom:0; z-index: 100 }
+    .sidebar-logo { padding: 20px 24px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 10px }
+    .sidebar-logo .icon { width: 36px; height: 36px; background: var(--gold); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 18px; color: var(--bg-primary); flex-shrink: 0 }
+    .sidebar-logo span { font-weight: 700; font-size: 15px; white-space: nowrap }
+    .sidebar-nav { flex: 1; padding: 12px }
+    .sidebar-nav a { display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-radius: var(--radius); color: var(--text-secondary); text-decoration: none; font-size: 14px; margin-bottom: 2px; transition: all .15s; cursor: pointer }
+    .sidebar-nav a:hover { background: var(--bg-hover); color: var(--text-primary) }
+    .sidebar-nav a.active { background: var(--gold-muted); color: var(--gold) }
+    .sidebar-nav a .badge { margin-left: auto; background: var(--danger); color: #fff; font-size: 11px; padding: 2px 7px; border-radius: 10px; font-weight: 600 }
+    .sidebar-footer { padding: 12px; border-top: 1px solid var(--border) }
+    .sidebar-footer a { display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-radius: var(--radius); color: var(--text-muted); text-decoration: none; font-size: 14px; cursor: pointer; transition: all .15s }
+    .sidebar-footer a:hover { background: var(--bg-hover); color: var(--danger) }
+    .main { margin-left: var(--sidebar-w); flex: 1; padding: 32px; overflow-y: auto }
+    .page-title { font-size: 22px; font-weight: 700; margin-bottom: 4px }
+    .page-subtitle { font-size: 13px; color: var(--text-secondary); margin-bottom: 28px }
+
+    /* Login */
+    .login-wrap { display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 20px }
+    .login-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 40px; width: 100%; max-width: 400px; box-shadow: var(--shadow) }
+    .login-card .logo { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 8px }
+    .login-card .logo .icon { width: 44px; height: 44px; background: var(--gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 22px; color: var(--bg-primary) }
+    .login-card .logo span { font-size: 20px; font-weight: 700 }
+    .login-card .desc { text-align: center; color: var(--text-secondary); font-size: 13px; margin-bottom: 28px }
+    .form-group { margin-bottom: 16px }
+    .form-group label { display: block; font-size: 13px; color: var(--text-secondary); margin-bottom: 6px; font-weight: 500 }
+    .form-group input { width: 100%; padding: 12px 14px; background: var(--bg-input); border: 1px solid var(--border); border-radius: var(--radius); color: var(--text-primary); font-size: 14px; outline: none; transition: border .15s }
+    .form-group input:focus { border-color: var(--gold) }
+    .form-group input::placeholder { color: var(--text-muted) }
+    .btn { padding: 12px 20px; border: none; border-radius: var(--radius); font-weight: 600; font-size: 14px; cursor: pointer; transition: all .15s; display: inline-flex; align-items: center; gap: 6px }
+    .btn-primary { background: var(--gold); color: var(--bg-primary); width: 100%; justify-content: center }
+    .btn-primary:hover { background: var(--gold-hover) }
+    .btn-success { background: var(--success); color: #fff }
+    .btn-success:hover { opacity: .85 }
+    .btn-danger { background: var(--danger); color: #fff }
+    .btn-danger:hover { background: var(--danger-hover) }
+    .btn-sm { padding: 6px 12px; font-size: 12px }
+    .btn-ghost { background: transparent; border: 1px solid var(--border); color: var(--text-secondary) }
+    .btn-ghost:hover { border-color: var(--gold); color: var(--gold) }
+    .error-msg { background: rgba(231,76,60,.12); color: var(--danger); font-size: 13px; padding: 10px 14px; border-radius: var(--radius); margin-bottom: 16px; display: none }
+
+    /* Stats */
+    .stats-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; margin-bottom: 32px }
+    .stat-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px 24px; transition: all .15s }
+    .stat-card:hover { border-color: var(--gold-muted) }
+    .stat-card .stat-icon { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; margin-bottom: 12px }
+    .stat-card .stat-icon.gold { background: var(--gold-muted); color: var(--gold) }
+    .stat-card .stat-icon.blue { background: rgba(52,152,219,.15); color: #3498db }
+    .stat-card .stat-icon.green { background: rgba(39,174,96,.15); color: #27ae60 }
+    .stat-card .stat-icon.orange { background: rgba(243,156,18,.15); color: #f39c12 }
+    .stat-card .stat-label { font-size: 12px; color: var(--text-secondary); margin-bottom: 4px; text-transform: uppercase; letter-spacing: .5px }
+    .stat-card .stat-value { font-size: 32px; font-weight: 700 }
+
+    /* Table */
+    .toolbar { display: flex; gap: 12px; margin-bottom: 16px; flex-wrap: wrap }
+    .toolbar input, .toolbar select { padding: 10px 14px; background: var(--bg-input); border: 1px solid var(--border); border-radius: var(--radius); color: var(--text-primary); font-size: 13px; outline: none; min-width: 200px }
+    .toolbar input:focus, .toolbar select:focus { border-color: var(--gold) }
+    .toolbar select { cursor: pointer }
+    .table-wrap { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden }
+    table { width: 100%; border-collapse: collapse; font-size: 13px }
+    thead { background: var(--bg-secondary) }
+    th { text-align: left; padding: 12px 16px; color: var(--text-secondary); font-weight: 600; font-size: 11px; text-transform: uppercase; letter-spacing: .5px }
+    td { padding: 12px 16px; border-top: 1px solid var(--border); vertical-align: middle }
+    tr:hover td { background: rgba(255,255,255,.01) }
+    .status { display: inline-flex; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .3px }
+    .status.pending { background: rgba(243,156,18,.15); color: var(--warning) }
+    .status.approved { background: rgba(39,174,96,.15); color: var(--success) }
+    .status.deactivated { background: rgba(231,76,60,.15); color: var(--danger) }
+    .actions { display: flex; gap: 6px }
+    .empty-state { padding: 48px 24px; text-align: center; color: var(--text-muted) }
+    .empty-state .icon { font-size: 40px; margin-bottom: 12px }
+    .empty-state p { font-size: 14px }
+
+    /* Loading */
+    .spinner { width: 24px; height: 24px; border: 3px solid var(--border); border-top-color: var(--gold); border-radius: 50%; animation: spin .6s linear infinite; display: inline-block }
+    @keyframes spin { to { transform: rotate(360deg) } }
+    .loading-wrap { display: flex; align-items: center; justify-content: center; padding: 48px; gap: 10px; color: var(--text-secondary); font-size: 14px }
+
+    /* Toast */
+    .toast-container { position: fixed; top: 20px; right: 20px; z-index: 9999; display: flex; flex-direction: column; gap: 8px }
+    .toast { padding: 12px 20px; border-radius: var(--radius); font-size: 13px; font-weight: 500; animation: slideIn .25s ease; box-shadow: var(--shadow); max-width: 360px }
+    .toast.success { background: #1a3c2a; border: 1px solid var(--success); color: #a0e8b8 }
+    .toast.error { background: #3c1a1a; border: 1px solid var(--danger); color: #e8a0a0 }
+    @keyframes slideIn { from { opacity:0; transform: translateX(40px) } to { opacity:1; transform: translateX(0) } }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .sidebar { width: 60px; overflow: hidden }
+      .sidebar-logo span, .sidebar-nav a span, .sidebar-nav a .badge, .sidebar-footer a span { display: none }
+      .sidebar-nav a, .sidebar-footer a { justify-content: center; padding: 10px }
+      .sidebar-logo { justify-content: center; padding: 16px }
+      .main { margin-left: 60px; padding: 20px }
+      .stats-grid { grid-template-columns: repeat(2, 1fr) }
+      .toolbar { flex-direction: column }
+      .toolbar input, .toolbar select { min-width: auto }
+    }
+    @media (max-width: 480px) { .stats-grid { grid-template-columns: 1fr } }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <!-- Login -->
+    <div id="loginView" class="login-wrap">
+      <div class="login-card">
+        <div class="logo"><div class="icon">&#9986;</div><span>Berber Yanımda</span></div>
+        <p class="desc">Admin panele giriş yapın</p>
+        <div id="loginError" class="error-msg"></div>
+        <div class="form-group"><label>Telefon Numarası</label><input type="tel" id="loginPhone" placeholder="5XX XXX XX XX" autocomplete="tel"></div>
+        <div class="form-group"><label>Şifre</label><input type="password" id="loginPassword" placeholder="Şifreniz" autocomplete="current-password"></div>
+        <button class="btn btn-primary" id="loginBtn" onclick="doLogin()">Giriş Yap</button>
+      </div>
+    </div>
+
+    <!-- App Layout -->
+    <div id="appLayout" class="app" style="display:none">
+      <aside class="sidebar">
+        <div class="sidebar-logo"><div class="icon">&#9986;</div><span>Berber Yanımda</span></div>
+        <nav class="sidebar-nav">
+          <a onclick="showPage('dashboard', this)" class="active" data-page="dashboard">&#9632; <span>Dashboard</span></a>
+          <a onclick="showPage('barbers', this)" data-page="barbers">&#128136; <span>Berberler</span><span class="badge" id="pendingBadge" style="display:none">0</span></a>
+        </nav>
+        <div class="sidebar-footer"><a onclick="logout()">&#8592; <span>Çıkış</span></a></div>
+      </aside>
+      <main class="main">
+        <!-- Dashboard -->
+        <div id="pageDashboard">
+          <h1 class="page-title">Dashboard</h1>
+          <p class="page-subtitle">Genel bakış ve özet istatistikler</p>
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-icon blue">&#128100;</div>
+              <div class="stat-label">Toplam Berber</div>
+              <div class="stat-value" id="statTotal">-</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon green">&#10003;</div>
+              <div class="stat-label">Onaylı Berber</div>
+              <div class="stat-value" id="statApproved">-</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon orange">&#8987;</div>
+              <div class="stat-label">Onay Bekleyen</div>
+              <div class="stat-value" id="statPending">-</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon gold">&#128203;</div>
+              <div class="stat-label">Pasif Berber</div>
+              <div class="stat-value" id="statDeactivated">-</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Barbers -->
+        <div id="pageBarbers" style="display:none">
+          <h1 class="page-title">Berber Yönetimi</h1>
+          <p class="page-subtitle">Berberleri onaylayın, pasifleştirin veya filtreleyin</p>
+          <div class="toolbar">
+            <input type="text" id="barberSearch" placeholder="İsim, şehir veya ilçe ile ara..." oninput="renderBarbers()">
+            <select id="barberFilter" onchange="renderBarbers()">
+              <option value="">Tümü</option>
+              <option value="pending">Onay Bekleyen</option>
+              <option value="approved">Onaylı</option>
+              <option value="deactivated">Pasif</option>
+            </select>
+          </div>
+          <div class="table-wrap">
+            <table><thead><tr><th>Berber Adı</th><th>Telefon</th><th>Şehir/İlçe</th><th>Durum</th><th>İşlemler</th></tr></thead><tbody id="barberTbody"><tr><td class="empty-state" colspan="5"><div class="spinner"></div></td></tr></tbody></table>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <div class="toast-container" id="toastContainer"></div>
+
+  <script>
+  /* ====== API Client ====== */
+  const api = {
+    baseUrl: '', // empty = same origin
+    token: localStorage.getItem('adminToken'),
+    refreshToken: localStorage.getItem('adminRefreshToken'),
+
+    async request(method, path, body) {
+      const headers = { 'Content-Type': 'application/json' }
+      if (this.token) headers['Authorization'] = 'Bearer ' + this.token
+      const opts = { method, headers }
+      if (body && (method === 'POST' || method === 'PUT' || method === 'PATCH')) opts.body = JSON.stringify(body)
+      try {
+        const res = await fetch(this.baseUrl + path, opts)
+        if (res.status === 401 && this.refreshToken) {
+          const refreshed = await this._tryRefresh()
+          if (refreshed) return this.request(method, path, body)
+          this._clearAuth()
+          showLogin()
+          return { success: false, error: 'Oturum süresi doldu.' }
+        }
+        if (res.status === 401) {
+          this._clearAuth()
+          showLogin()
+          return { success: false, error: 'Oturum süresi doldu.' }
+        }
+        if (res.status === 204 || res.headers.get('content-length') === '0') return { success: true, data: null }
+        const text = await res.text()
+        if (!text) return { success: true, data: null }
+        try { return JSON.parse(text) } catch { return { success: false, error: 'Geçersiz yanıt', raw: text } }
+      } catch (e) {
+        return { success: false, error: 'Bağlantı hatası: ' + e.message }
+      }
+    },
+
+    async _tryRefresh() {
+      try {
+        const res = await fetch(this.baseUrl + '/auth/refresh', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ refreshToken: this.refreshToken })
+        })
+        if (!res.ok) return false
+        const data = await res.json()
+        if (data?.data?.tokens?.accessToken) {
+          this.token = data.data.tokens.accessToken
+          this.refreshToken = data.data.tokens.refreshToken || this.refreshToken
+          localStorage.setItem('adminToken', this.token)
+          localStorage.setItem('adminRefreshToken', this.refreshToken)
+          return true
+        }
+        return false
+      } catch { return false }
+    },
+
+    _clearAuth() {
+      this.token = null
+      this.refreshToken = null
+      localStorage.removeItem('adminToken')
+      localStorage.removeItem('adminRefreshToken')
+    },
+
+    async login(phone, password) {
+      const data = await this.request('POST', '/auth/login', { phoneNumber: phone, password })
+      if (data?.success && data?.data?.tokens) {
+        this.token = data.data.tokens.accessToken
+        this.refreshToken = data.data.tokens.refreshToken
+        localStorage.setItem('adminToken', this.token)
+        localStorage.setItem('adminRefreshToken', this.refreshToken)
+        return true
+      }
+      return false
+    },
+
+    getBarbers(page, size) { return this.request('GET', '/admin/barbers?page=' + (page || 1) + '&pageSize=' + (size || 100)) },
+    approveBarber(id) { return this.request('PATCH', '/admin/barbers/' + id + '/approve') },
+    deactivateBarber(id) { return this.request('PATCH', '/admin/barbers/' + id + '/deactivate') }
+  }
+
+  /* ====== State ====== */
+  let barbers = []
+  let currentPage = 'dashboard'
+
+  /* ====== Init ====== */
+  if (api.token && api.refreshToken) {
+    showApp()
+    loadAll()
+  }
+
+  /* ====== Login ====== */
+  async function doLogin() {
+    const phone = document.getElementById('loginPhone').value.trim()
+    const pwd = document.getElementById('loginPassword').value
+    const err = document.getElementById('loginError')
+    const btn = document.getElementById('loginBtn')
+    if (!phone || !pwd) { err.style.display = 'block'; err.textContent = 'Lütfen tüm alanları doldurun.'; return }
+    err.style.display = 'none'
+    btn.disabled = true
+    btn.innerHTML = '<span class="spinner"></span> Giriş yapılıyor...'
+    const ok = await api.login(phone, pwd)
+    if (ok) { showApp(); loadAll() }
+    else { err.style.display = 'block'; err.textContent = 'Giriş başarısız. Telefon veya şifre hatalı.' }
+    btn.disabled = false
+    btn.innerHTML = 'Giriş Yap'
+  }
+  document.getElementById('loginPassword').addEventListener('keydown', function(e) { if (e.key === 'Enter') doLogin() })
+  document.getElementById('loginPhone').addEventListener('keydown', function(e) { if (e.key === 'Enter') doLogin() })
+
+  /* ====== Navigation ====== */
+  function showApp() {
+    document.getElementById('loginView').style.display = 'none'
+    document.getElementById('appLayout').style.display = 'flex'
+  }
+  function showLogin() {
+    document.getElementById('loginView').style.display = 'flex'
+    document.getElementById('appLayout').style.display = 'none'
+    document.getElementById('loginPhone').value = ''
+    document.getElementById('loginPassword').value = ''
+    document.getElementById('loginError').style.display = 'none'
+    api._clearAuth()
+  }
+  function logout() { showLogin(); toast('Çıkış yapıldı.', 'success') }
+  function showPage(page, el) {
+    currentPage = page
+    document.querySelectorAll('.sidebar-nav a').forEach(a => a.classList.remove('active'))
+    if (el) el.classList.add('active')
+    else document.querySelector('[data-page="' + page + '"]')?.classList.add('active')
+    document.getElementById('pageDashboard').style.display = page === 'dashboard' ? 'block' : 'none'
+    document.getElementById('pageBarbers').style.display = page === 'barbers' ? 'block' : 'none'
+    if (page === 'barbers') renderBarbers()
+  }
+
+  /* ====== Data Loading ====== */
+  async function loadAll() { await loadBarbers() }
+  async function loadBarbers() {
+    const res = await api.getBarbers(1, 500)
+    if (res?.success && res.data) {
+      barbers = res.data.items || res.data.data || res.data || []
+      if (!Array.isArray(barbers)) barbers = []
+    } else {
+      barbers = []
+    }
+    updateDashboard()
+    renderBarbers()
+    updatePendingBadge()
+  }
+
+  function updateDashboard() {
+    const total = barbers.length
+    const pending = barbers.filter(b => b.approvalStatus === 'pending' || b.status === 'pending' || b.approvalStatus === 'Pending' || b.status === 'Pending').length
+    const approved = barbers.filter(b => b.approvalStatus === 'approved' || b.status === 'approved' || b.approvalStatus === 'Approved' || b.status === 'Approved').length
+    const deactivated = barbers.filter(b => b.approvalStatus === 'deactivated' || b.status === 'deactivated' || b.approvalStatus === 'Deactivated' || b.status === 'Deactivated').length
+    document.getElementById('statTotal').textContent = total
+    document.getElementById('statApproved').textContent = approved
+    document.getElementById('statPending').textContent = pending
+    document.getElementById('statDeactivated').textContent = deactivated
+  }
+
+  function updatePendingBadge() {
+    const pending = barbers.filter(b => (b.approvalStatus || b.status || '').toLowerCase() === 'pending').length
+    const badge = document.getElementById('pendingBadge')
+    if (pending > 0) { badge.style.display = 'inline'; badge.textContent = pending }
+    else badge.style.display = 'none'
+  }
+
+  function getStatus(b) {
+    const s = (b.approvalStatus || b.status || 'pending').toLowerCase()
+    if (s === 'approved') return 'approved'
+    if (s === 'deactivated') return 'deactivated'
+    return 'pending'
+  }
+
+  function getStatusText(b) {
+    const s = getStatus(b)
+    if (s === 'approved') return 'Onaylı'
+    if (s === 'deactivated') return 'Pasif'
+    return 'Onay Bekliyor'
+  }
+
+  function renderBarbers() {
+    if (currentPage !== 'barbers') return
+    const tbody = document.getElementById('barberTbody')
+    const search = (document.getElementById('barberSearch')?.value || '').toLowerCase()
+    const filter = document.getElementById('barberFilter')?.value || ''
+
+    let filtered = barbers
+    if (search) filtered = filtered.filter(b => {
+      const name = (b.barberName || b.name || '').toLowerCase()
+      const city = (b.city || b.shopCity || '').toLowerCase()
+      const district = (b.district || b.shopDistrict || '').toLowerCase()
+      const phone = (b.phone || b.phoneNumber || '').toLowerCase()
+      return name.includes(search) || city.includes(search) || district.includes(search) || phone.includes(search)
+    })
+    if (filter) filtered = filtered.filter(b => getStatus(b) === filter)
+
+    if (!filtered.length) {
+      tbody.innerHTML = '<tr><td class="empty-state" colspan="5"><p>Sonuç bulunamadı.</p></td></tr>'
+      return
+    }
+
+    tbody.innerHTML = filtered.map(b => {
+      const name = b.barberName || b.name || '—'
+      const phone = b.phone || b.phoneNumber || '—'
+      const city = b.city || b.shopCity || '—'
+      const district = b.district || b.shopDistrict || '—'
+      const location = city !== '—' ? city + (district !== '—' ? ' / ' + district : '') : '—'
+      const st = getStatus(b)
+      const stText = getStatusText(b)
+      const id = b.id || b.barberId
+      let actionHtml = ''
+      if (st === 'pending') actionHtml = '<button class="btn btn-success btn-sm" onclick="approveBarber(\'' + id + '\')">Onayla</button>'
+      else if (st === 'approved') actionHtml = '<button class="btn btn-danger btn-sm" onclick="deactivateBarber(\'' + id + '\')">Pasifleştir</button>'
+      else if (st === 'deactivated') actionHtml = '<button class="btn btn-success btn-sm" onclick="approveBarber(\'' + id + '\')">Yeniden Onayla</button>'
+      return '<tr><td>' + esc(name) + '</td><td>' + esc(phone) + '</td><td>' + esc(location) + '</td><td><span class="status ' + st + '">' + stText + '</span></td><td class="actions">' + actionHtml + '</td></tr>'
+    }).join('')
+  }
+
+  function esc(str) { const d = document.createElement('div'); d.textContent = str; return d.innerHTML }
+
+  /* ====== Actions ====== */
+  async function approveBarber(id) {
+    const res = await api.approveBarber(id)
+    if (res?.success !== false && res?.success !== undefined ? res.success : true) {
+      toast('Berber onaylandı.', 'success')
+      loadBarbers()
+    } else {
+      toast('Onaylama başarısız: ' + (res?.error || 'Bilinmeyen hata'), 'error')
+    }
+  }
+
+  async function deactivateBarber(id) {
+    if (!confirm('Bu berberi pasifleştirmek istediğinize emin misiniz?')) return
+    const res = await api.deactivateBarber(id)
+    if (res?.success !== false && res?.success !== undefined ? res.success : true) {
+      toast('Berber pasifleştirildi.', 'success')
+      loadBarbers()
+    } else {
+      toast('Pasifleştirme başarısız: ' + (res?.error || 'Bilinmeyen hata'), 'error')
+    }
+  }
+
+  /* ====== Toast ====== */
+  function toast(msg, type) {
+    const container = document.getElementById('toastContainer')
+    const div = document.createElement('div')
+    div.className = 'toast ' + (type || 'success')
+    div.textContent = msg
+    container.appendChild(div)
+    setTimeout(() => { div.style.opacity = '0'; div.style.transition = 'opacity .3s'; setTimeout(() => div.remove(), 300) }, 3000)
+  }
+  </script>
+</body>
+</html>

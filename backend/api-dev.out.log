@@ -1,0 +1,309 @@
+C:\Proje\BerberYanimda\backend\src\BerberYanimda.Api\Properties\launchSettings.json içindeki başlatma ayarları kullanılıyor...
+Derleniyor...
+warn: Microsoft.EntityFrameworkCore.Model.Validation[10622]
+      Entity 'Appointment' has a global query filter defined and is the required end of a relationship with the entity 'AppointmentService'. This may lead to unexpected results when the required entity is filtered out. Either configure the navigation as optional, or define matching query filters for both entities in the navigation. See https://go.microsoft.com/fwlink/?linkid=2131316 for more information.
+warn: Microsoft.EntityFrameworkCore.Model.Validation[10622]
+      Entity 'BarberShop' has a global query filter defined and is the required end of a relationship with the entity 'BarberShopImage'. This may lead to unexpected results when the required entity is filtered out. Either configure the navigation as optional, or define matching query filters for both entities in the navigation. See https://go.microsoft.com/fwlink/?linkid=2131316 for more information.
+warn: Microsoft.EntityFrameworkCore.Model.Validation[10622]
+      Entity 'Coupon' has a global query filter defined and is the required end of a relationship with the entity 'CouponUsage'. This may lead to unexpected results when the required entity is filtered out. Either configure the navigation as optional, or define matching query filters for both entities in the navigation. See https://go.microsoft.com/fwlink/?linkid=2131316 for more information.
+warn: Microsoft.EntityFrameworkCore.Model.Validation[10622]
+      Entity 'User' has a global query filter defined and is the required end of a relationship with the entity 'DeviceToken'. This may lead to unexpected results when the required entity is filtered out. Either configure the navigation as optional, or define matching query filters for both entities in the navigation. See https://go.microsoft.com/fwlink/?linkid=2131316 for more information.
+warn: Microsoft.EntityFrameworkCore.Model.Validation[10622]
+      Entity 'BarberShop' has a global query filter defined and is the required end of a relationship with the entity 'FavoriteBarberShop'. This may lead to unexpected results when the required entity is filtered out. Either configure the navigation as optional, or define matching query filters for both entities in the navigation. See https://go.microsoft.com/fwlink/?linkid=2131316 for more information.
+warn: Microsoft.EntityFrameworkCore.Model.Validation[10622]
+      Entity 'User' has a global query filter defined and is the required end of a relationship with the entity 'Notification'. This may lead to unexpected results when the required entity is filtered out. Either configure the navigation as optional, or define matching query filters for both entities in the navigation. See https://go.microsoft.com/fwlink/?linkid=2131316 for more information.
+warn: Microsoft.EntityFrameworkCore.Model.Validation[10622]
+      Entity 'Appointment' has a global query filter defined and is the required end of a relationship with the entity 'Payment'. This may lead to unexpected results when the required entity is filtered out. Either configure the navigation as optional, or define matching query filters for both entities in the navigation. See https://go.microsoft.com/fwlink/?linkid=2131316 for more information.
+warn: Microsoft.EntityFrameworkCore.Model.Validation[10622]
+      Entity 'User' has a global query filter defined and is the required end of a relationship with the entity 'RefreshToken'. This may lead to unexpected results when the required entity is filtered out. Either configure the navigation as optional, or define matching query filters for both entities in the navigation. See https://go.microsoft.com/fwlink/?linkid=2131316 for more information.
+warn: Microsoft.EntityFrameworkCore.Model.Validation[10622]
+      Entity 'StaffMember' has a global query filter defined and is the required end of a relationship with the entity 'StaffBreak'. This may lead to unexpected results when the required entity is filtered out. Either configure the navigation as optional, or define matching query filters for both entities in the navigation. See https://go.microsoft.com/fwlink/?linkid=2131316 for more information.
+warn: Microsoft.EntityFrameworkCore.Model.Validation[10622]
+      Entity 'BarberService' has a global query filter defined and is the required end of a relationship with the entity 'StaffService'. This may lead to unexpected results when the required entity is filtered out. Either configure the navigation as optional, or define matching query filters for both entities in the navigation. See https://go.microsoft.com/fwlink/?linkid=2131316 for more information.
+warn: Microsoft.EntityFrameworkCore.Model.Validation[10622]
+      Entity 'User' has a global query filter defined and is the required end of a relationship with the entity 'SupportTicket'. This may lead to unexpected results when the required entity is filtered out. Either configure the navigation as optional, or define matching query filters for both entities in the navigation. See https://go.microsoft.com/fwlink/?linkid=2131316 for more information.
+warn: Microsoft.EntityFrameworkCore.Model.Validation[10622]
+      Entity 'BarberShop' has a global query filter defined and is the required end of a relationship with the entity 'WorkingHour'. This may lead to unexpected results when the required entity is filtered out. Either configure the navigation as optional, or define matching query filters for both entities in the navigation. See https://go.microsoft.com/fwlink/?linkid=2131316 for more information.
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (21ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (40ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      
+      IF EXISTS
+          (SELECT *
+           FROM [sys].[objects] o
+           WHERE [o].[type] = 'U'
+           AND [o].[is_ms_shipped] = 0
+           AND NOT EXISTS (SELECT *
+               FROM [sys].[extended_properties] AS [ep]
+               WHERE [ep].[major_id] = [o].[object_id]
+                   AND [ep].[minor_id] = 0
+                   AND [ep].[class] = 1
+                   AND [ep].[name] = N'microsoft_database_tools_support'
+          )
+      )
+      SELECT 1 ELSE SELECT 0
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (8ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT CASE
+          WHEN EXISTS (
+              SELECT 1
+              FROM [Users] AS [u]
+              WHERE [u].[DeletedAt] IS NULL) THEN CAST(1 AS bit)
+          ELSE CAST(0 AS bit)
+      END
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (5ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT CASE
+          WHEN EXISTS (
+              SELECT 1
+              FROM [BarberShops] AS [b]
+              WHERE [b].[DeletedAt] IS NULL) THEN CAST(1 AS bit)
+          ELSE CAST(0 AS bit)
+      END
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (3ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT CASE
+          WHEN EXISTS (
+              SELECT 1
+              FROM [StaffServices] AS [s]) THEN CAST(1 AS bit)
+          ELSE CAST(0 AS bit)
+      END
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (4ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT CASE
+          WHEN EXISTS (
+              SELECT 1
+              FROM [WorkingHours] AS [w]) THEN CAST(1 AS bit)
+          ELSE CAST(0 AS bit)
+      END
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (3ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT CASE
+          WHEN EXISTS (
+              SELECT 1
+              FROM [SupportTicketReplies] AS [s]) THEN CAST(1 AS bit)
+          ELSE CAST(0 AS bit)
+      END
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT CASE
+          WHEN EXISTS (
+              SELECT 1
+              FROM [Users] AS [u]
+              WHERE [u].[DeletedAt] IS NULL) THEN CAST(1 AS bit)
+          ELSE CAST(0 AS bit)
+      END
+warn: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware[16]
+      The WebRootPath was not found: C:\Proje\BerberYanimda\backend\src\BerberYanimda.Api\wwwroot. Static files may be unavailable.
+info: Microsoft.Hosting.Lifetime[14]
+      Now listening on: http://localhost:5000
+info: Microsoft.Hosting.Lifetime[0]
+      Application started. Press Ctrl+C to shut down.
+info: Microsoft.Hosting.Lifetime[0]
+      Hosting environment: Development
+info: Microsoft.Hosting.Lifetime[0]
+      Content root path: C:\Proje\BerberYanimda\backend\src\BerberYanimda.Api
+warn: Microsoft.AspNetCore.HttpsPolicy.HttpsRedirectionMiddleware[3]
+      Failed to determine the https port for redirect.
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (5ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM [BarberShops] AS [b]
+      WHERE [b].[DeletedAt] IS NULL AND [b].[IsActive] = CAST(1 AS bit) AND [b].[IsApproved] = CAST(1 AS bit)
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (18ms) [Parameters=[@__day_2='?' (DbType = Int32), @__favoriteIds_3='?' (Size = 4000), @__p_0='?' (DbType = Int32), @__p_1='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      SELECT [b].[Id], [b].[Name], [b].[District], [b].[City], [b].[AverageRating], [b].[ReviewCount], [b].[StartingPrice], CASE
+          WHEN EXISTS (
+              SELECT 1
+              FROM [WorkingHours] AS [w]
+              WHERE [b].[Id] = [w].[BarberShopId] AND [w].[DayOfWeek] = @__day_2 AND [w].[IsClosed] = CAST(0 AS bit)) THEN CAST(1 AS bit)
+          ELSE CAST(0 AS bit)
+      END, [b].[CoverImageUrl], CASE
+          WHEN [b].[Id] IN (
+              SELECT [f].[value]
+              FROM OPENJSON(@__favoriteIds_3) WITH ([value] uniqueidentifier '$') AS [f]
+          ) THEN CAST(1 AS bit)
+          ELSE CAST(0 AS bit)
+      END
+      FROM [BarberShops] AS [b]
+      WHERE [b].[DeletedAt] IS NULL AND [b].[IsActive] = CAST(1 AS bit) AND [b].[IsApproved] = CAST(1 AS bit)
+      ORDER BY [b].[AverageRating] DESC, [b].[StartingPrice]
+      OFFSET @__p_0 ROWS FETCH NEXT @__p_1 ROWS ONLY
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (4ms) [Parameters=[@__cutoff_0='?' (DbType = DateTime2)], CommandType='Text', CommandTimeout='30']
+      SELECT [o].[Id], [o].[AttemptCount], [o].[CodeHash], [o].[ExpiresAt], [o].[LockedUntil], [o].[PhoneNumber], [o].[Purpose], [o].[SentAt], [o].[VerifiedAt]
+      FROM [OtpCodes] AS [o]
+      WHERE [o].[ExpiresAt] < @__cutoff_0
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (4ms) [Parameters=[@__cutoff_0='?' (DbType = DateTime2)], CommandType='Text', CommandTimeout='30']
+      SELECT [r].[Id], [r].[CreatedAt], [r].[ExpiresAt], [r].[IpAddress], [r].[RevokedAt], [r].[TokenHash], [r].[UserAgent], [r].[UserId]
+      FROM [RefreshTokens] AS [r]
+      WHERE [r].[RevokedAt] IS NOT NULL AND [r].[RevokedAt] < @__cutoff_0
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (13ms) [Parameters=[@__today_0='?' (DbType = Date), @__currentTime_1='?' (DbType = Time)], CommandType='Text', CommandTimeout='30']
+      SELECT [a].[Id], [a].[AppointmentDate], [a].[BarberShopId], [a].[CancellationReason], [a].[CancelledAt], [a].[CompletedAt], [a].[CreatedAt], [a].[CustomerNote], [a].[CustomerUserId], [a].[DeletedAt], [a].[EndTime], [a].[StaffMemberId], [a].[StartTime], [a].[Status], [a].[TotalDurationMinutes], [a].[TotalPrice], [a].[UpdatedAt]
+      FROM [Appointments] AS [a]
+      WHERE [a].[DeletedAt] IS NULL AND [a].[Status] IN (N'Confirmed', N'Upcoming') AND ([a].[AppointmentDate] < @__today_0 OR ([a].[AppointmentDate] = @__today_0 AND [a].[EndTime] < @__currentTime_1))
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (5ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM [BarberShops] AS [b]
+      WHERE [b].[DeletedAt] IS NULL AND [b].[IsActive] = CAST(1 AS bit) AND [b].[IsApproved] = CAST(1 AS bit)
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (7ms) [Parameters=[@__day_2='?' (DbType = Int32), @__favoriteIds_3='?' (Size = 4000), @__p_0='?' (DbType = Int32), @__p_1='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      SELECT [b].[Id], [b].[Name], [b].[District], [b].[City], [b].[AverageRating], [b].[ReviewCount], [b].[StartingPrice], CASE
+          WHEN EXISTS (
+              SELECT 1
+              FROM [WorkingHours] AS [w]
+              WHERE [b].[Id] = [w].[BarberShopId] AND [w].[DayOfWeek] = @__day_2 AND [w].[IsClosed] = CAST(0 AS bit)) THEN CAST(1 AS bit)
+          ELSE CAST(0 AS bit)
+      END, [b].[CoverImageUrl], CASE
+          WHEN [b].[Id] IN (
+              SELECT [f].[value]
+              FROM OPENJSON(@__favoriteIds_3) WITH ([value] uniqueidentifier '$') AS [f]
+          ) THEN CAST(1 AS bit)
+          ELSE CAST(0 AS bit)
+      END
+      FROM [BarberShops] AS [b]
+      WHERE [b].[DeletedAt] IS NULL AND [b].[IsActive] = CAST(1 AS bit) AND [b].[IsApproved] = CAST(1 AS bit)
+      ORDER BY [b].[AverageRating] DESC, [b].[StartingPrice]
+      OFFSET @__p_0 ROWS FETCH NEXT @__p_1 ROWS ONLY
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (5ms) [Parameters=[@__phone_0='?' (Size = 30)], CommandType='Text', CommandTimeout='30']
+      SELECT TOP(1) [u].[Id], [u].[BirthDate], [u].[CreatedAt], [u].[DeletedAt], [u].[Email], [u].[FullName], [u].[IsActive], [u].[IsEmailVerified], [u].[IsPhoneVerified], [u].[PasswordHash], [u].[PhoneNumber], [u].[ProfileImageUrl], [u].[Role], [u].[UpdatedAt]
+      FROM [Users] AS [u]
+      WHERE [u].[DeletedAt] IS NULL AND [u].[PhoneNumber] = @__phone_0 AND [u].[IsActive] = CAST(1 AS bit)
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (3ms) [Parameters=[@p0='?' (DbType = Guid), @p1='?' (DbType = DateTime2), @p2='?' (DbType = DateTime2), @p3='?' (Size = 4000), @p4='?' (DbType = DateTime2), @p5='?' (Size = 450), @p6='?' (Size = 4000), @p7='?' (DbType = Guid)], CommandType='Text', CommandTimeout='30']
+      SET IMPLICIT_TRANSACTIONS OFF;
+      SET NOCOUNT ON;
+      INSERT INTO [RefreshTokens] ([Id], [CreatedAt], [ExpiresAt], [IpAddress], [RevokedAt], [TokenHash], [UserAgent], [UserId])
+      VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7);
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (13ms) [Parameters=[@__userId_0='?' (DbType = Guid)], CommandType='Text', CommandTimeout='30']
+      SELECT [f].[BarberShopId], [t].[Name], [t].[District], [t].[City], [t].[CoverImageUrl], [t].[AverageRating]
+      FROM [FavoriteBarberShops] AS [f]
+      INNER JOIN (
+          SELECT [b].[Id], [b].[AverageRating], [b].[City], [b].[CoverImageUrl], [b].[District], [b].[IsActive], [b].[IsApproved], [b].[Name]
+          FROM [BarberShops] AS [b]
+          WHERE [b].[DeletedAt] IS NULL
+      ) AS [t] ON [f].[BarberShopId] = [t].[Id]
+      WHERE [f].[UserId] = @__userId_0 AND [t].[IsActive] = CAST(1 AS bit) AND [t].[IsApproved] = CAST(1 AS bit)
+      ORDER BY [f].[CreatedAt] DESC
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (23ms) [Parameters=[@__p_1='?' (DbType = Int32), @__userId_0='?' (DbType = Guid)], CommandType='Text', CommandTimeout='30']
+      SELECT [t].[Id], [t].[AppointmentDate], [t].[BarberShopId], [t].[CancellationReason], [t].[CancelledAt], [t].[CompletedAt], [t].[CreatedAt], [t].[CustomerNote], [t].[CustomerUserId], [t].[DeletedAt], [t].[EndTime], [t].[StaffMemberId], [t].[StartTime], [t].[Status], [t].[TotalDurationMinutes], [t].[TotalPrice], [t].[UpdatedAt], [t0].[Id], [t0].[Address], [t0].[AverageRating], [t0].[City], [t0].[CoverImageUrl], [t0].[CreatedAt], [t0].[DeletedAt], [t0].[Description], [t0].[District], [t0].[Email], [t0].[IsActive], [t0].[IsApproved], [t0].[Latitude], [t0].[LogoUrl], [t0].[Longitude], [t0].[Name], [t0].[OwnerUserId], [t0].[PhoneNumber], [t0].[ReviewCount], [t0].[StartingPrice], [t0].[UpdatedAt], [t1].[Id], [t1].[AvatarUrl], [t1].[AverageRating], [t1].[BarberShopId], [t1].[Bio], [t1].[CreatedAt], [t1].[DeletedAt], [t1].[Expertise], [t1].[FullName], [t1].[IsActive], [t1].[UpdatedAt], [t1].[UserId], [a0].[Id], [a0].[AppointmentId], [a0].[BarberServiceId], [a0].[DurationMinutes], [a0].[Price], [a0].[ServiceName]
+      FROM (
+          SELECT TOP(@__p_1) [a].[Id], [a].[AppointmentDate], [a].[BarberShopId], [a].[CancellationReason], [a].[CancelledAt], [a].[CompletedAt], [a].[CreatedAt], [a].[CustomerNote], [a].[CustomerUserId], [a].[DeletedAt], [a].[EndTime], [a].[StaffMemberId], [a].[StartTime], [a].[Status], [a].[TotalDurationMinutes], [a].[TotalPrice], [a].[UpdatedAt]
+          FROM [Appointments] AS [a]
+          WHERE [a].[DeletedAt] IS NULL AND [a].[CustomerUserId] = @__userId_0
+          ORDER BY [a].[AppointmentDate] DESC, [a].[StartTime] DESC
+      ) AS [t]
+      INNER JOIN (
+          SELECT [b].[Id], [b].[Address], [b].[AverageRating], [b].[City], [b].[CoverImageUrl], [b].[CreatedAt], [b].[DeletedAt], [b].[Description], [b].[District], [b].[Email], [b].[IsActive], [b].[IsApproved], [b].[Latitude], [b].[LogoUrl], [b].[Longitude], [b].[Name], [b].[OwnerUserId], [b].[PhoneNumber], [b].[ReviewCount], [b].[StartingPrice], [b].[UpdatedAt]
+          FROM [BarberShops] AS [b]
+          WHERE [b].[DeletedAt] IS NULL
+      ) AS [t0] ON [t].[BarberShopId] = [t0].[Id]
+      LEFT JOIN (
+          SELECT [s].[Id], [s].[AvatarUrl], [s].[AverageRating], [s].[BarberShopId], [s].[Bio], [s].[CreatedAt], [s].[DeletedAt], [s].[Expertise], [s].[FullName], [s].[IsActive], [s].[UpdatedAt], [s].[UserId]
+          FROM [StaffMembers] AS [s]
+          WHERE [s].[DeletedAt] IS NULL
+      ) AS [t1] ON [t].[StaffMemberId] = [t1].[Id]
+      LEFT JOIN [AppointmentServices] AS [a0] ON [t].[Id] = [a0].[AppointmentId]
+      ORDER BY [t].[AppointmentDate] DESC, [t].[StartTime] DESC, [t].[Id], [t0].[Id], [t1].[Id]
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (5ms) [Parameters=[@__p_1='?' (DbType = Int32), @__userId_0='?' (DbType = Guid)], CommandType='Text', CommandTimeout='30']
+      SELECT TOP(@__p_1) [n].[Id], [n].[Title], [n].[Message], [n].[Type], [n].[IsRead], [n].[CreatedAt]
+      FROM [Notifications] AS [n]
+      WHERE [n].[UserId] = @__userId_0
+      ORDER BY [n].[CreatedAt] DESC
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (2ms) [Parameters=[@__p_1='?' (DbType = Int32), @__userId_0='?' (DbType = Guid)], CommandType='Text', CommandTimeout='30']
+      SELECT [t].[Id], [t].[AppointmentDate], [t].[BarberShopId], [t].[CancellationReason], [t].[CancelledAt], [t].[CompletedAt], [t].[CreatedAt], [t].[CustomerNote], [t].[CustomerUserId], [t].[DeletedAt], [t].[EndTime], [t].[StaffMemberId], [t].[StartTime], [t].[Status], [t].[TotalDurationMinutes], [t].[TotalPrice], [t].[UpdatedAt], [t0].[Id], [t0].[Address], [t0].[AverageRating], [t0].[City], [t0].[CoverImageUrl], [t0].[CreatedAt], [t0].[DeletedAt], [t0].[Description], [t0].[District], [t0].[Email], [t0].[IsActive], [t0].[IsApproved], [t0].[Latitude], [t0].[LogoUrl], [t0].[Longitude], [t0].[Name], [t0].[OwnerUserId], [t0].[PhoneNumber], [t0].[ReviewCount], [t0].[StartingPrice], [t0].[UpdatedAt], [t1].[Id], [t1].[AvatarUrl], [t1].[AverageRating], [t1].[BarberShopId], [t1].[Bio], [t1].[CreatedAt], [t1].[DeletedAt], [t1].[Expertise], [t1].[FullName], [t1].[IsActive], [t1].[UpdatedAt], [t1].[UserId], [a0].[Id], [a0].[AppointmentId], [a0].[BarberServiceId], [a0].[DurationMinutes], [a0].[Price], [a0].[ServiceName]
+      FROM (
+          SELECT TOP(@__p_1) [a].[Id], [a].[AppointmentDate], [a].[BarberShopId], [a].[CancellationReason], [a].[CancelledAt], [a].[CompletedAt], [a].[CreatedAt], [a].[CustomerNote], [a].[CustomerUserId], [a].[DeletedAt], [a].[EndTime], [a].[StaffMemberId], [a].[StartTime], [a].[Status], [a].[TotalDurationMinutes], [a].[TotalPrice], [a].[UpdatedAt]
+          FROM [Appointments] AS [a]
+          WHERE [a].[DeletedAt] IS NULL AND [a].[CustomerUserId] = @__userId_0
+          ORDER BY [a].[AppointmentDate] DESC, [a].[StartTime] DESC
+      ) AS [t]
+      INNER JOIN (
+          SELECT [b].[Id], [b].[Address], [b].[AverageRating], [b].[City], [b].[CoverImageUrl], [b].[CreatedAt], [b].[DeletedAt], [b].[Description], [b].[District], [b].[Email], [b].[IsActive], [b].[IsApproved], [b].[Latitude], [b].[LogoUrl], [b].[Longitude], [b].[Name], [b].[OwnerUserId], [b].[PhoneNumber], [b].[ReviewCount], [b].[StartingPrice], [b].[UpdatedAt]
+          FROM [BarberShops] AS [b]
+          WHERE [b].[DeletedAt] IS NULL
+      ) AS [t0] ON [t].[BarberShopId] = [t0].[Id]
+      LEFT JOIN (
+          SELECT [s].[Id], [s].[AvatarUrl], [s].[AverageRating], [s].[BarberShopId], [s].[Bio], [s].[CreatedAt], [s].[DeletedAt], [s].[Expertise], [s].[FullName], [s].[IsActive], [s].[UpdatedAt], [s].[UserId]
+          FROM [StaffMembers] AS [s]
+          WHERE [s].[DeletedAt] IS NULL
+      ) AS [t1] ON [t].[StaffMemberId] = [t1].[Id]
+      LEFT JOIN [AppointmentServices] AS [a0] ON [t].[Id] = [a0].[AppointmentId]
+      ORDER BY [t].[AppointmentDate] DESC, [t].[StartTime] DESC, [t].[Id], [t0].[Id], [t1].[Id]
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (1ms) [Parameters=[@__userId_0='?' (DbType = Guid)], CommandType='Text', CommandTimeout='30']
+      SELECT [f].[BarberShopId], [t].[Name], [t].[District], [t].[City], [t].[CoverImageUrl], [t].[AverageRating]
+      FROM [FavoriteBarberShops] AS [f]
+      INNER JOIN (
+          SELECT [b].[Id], [b].[AverageRating], [b].[City], [b].[CoverImageUrl], [b].[District], [b].[IsActive], [b].[IsApproved], [b].[Name]
+          FROM [BarberShops] AS [b]
+          WHERE [b].[DeletedAt] IS NULL
+      ) AS [t] ON [f].[BarberShopId] = [t].[Id]
+      WHERE [f].[UserId] = @__userId_0 AND [t].[IsActive] = CAST(1 AS bit) AND [t].[IsApproved] = CAST(1 AS bit)
+      ORDER BY [f].[CreatedAt] DESC
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (1ms) [Parameters=[@__userId_0='?' (DbType = Guid)], CommandType='Text', CommandTimeout='30']
+      SELECT [f].[BarberShopId], [t].[Name], [t].[District], [t].[City], [t].[CoverImageUrl], [t].[AverageRating]
+      FROM [FavoriteBarberShops] AS [f]
+      INNER JOIN (
+          SELECT [b].[Id], [b].[AverageRating], [b].[City], [b].[CoverImageUrl], [b].[District], [b].[IsActive], [b].[IsApproved], [b].[Name]
+          FROM [BarberShops] AS [b]
+          WHERE [b].[DeletedAt] IS NULL
+      ) AS [t] ON [f].[BarberShopId] = [t].[Id]
+      WHERE [f].[UserId] = @__userId_0 AND [t].[IsActive] = CAST(1 AS bit) AND [t].[IsApproved] = CAST(1 AS bit)
+      ORDER BY [f].[CreatedAt] DESC
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (2ms) [Parameters=[@__p_1='?' (DbType = Int32), @__userId_0='?' (DbType = Guid)], CommandType='Text', CommandTimeout='30']
+      SELECT [t].[Id], [t].[AppointmentDate], [t].[BarberShopId], [t].[CancellationReason], [t].[CancelledAt], [t].[CompletedAt], [t].[CreatedAt], [t].[CustomerNote], [t].[CustomerUserId], [t].[DeletedAt], [t].[EndTime], [t].[StaffMemberId], [t].[StartTime], [t].[Status], [t].[TotalDurationMinutes], [t].[TotalPrice], [t].[UpdatedAt], [t0].[Id], [t0].[Address], [t0].[AverageRating], [t0].[City], [t0].[CoverImageUrl], [t0].[CreatedAt], [t0].[DeletedAt], [t0].[Description], [t0].[District], [t0].[Email], [t0].[IsActive], [t0].[IsApproved], [t0].[Latitude], [t0].[LogoUrl], [t0].[Longitude], [t0].[Name], [t0].[OwnerUserId], [t0].[PhoneNumber], [t0].[ReviewCount], [t0].[StartingPrice], [t0].[UpdatedAt], [t1].[Id], [t1].[AvatarUrl], [t1].[AverageRating], [t1].[BarberShopId], [t1].[Bio], [t1].[CreatedAt], [t1].[DeletedAt], [t1].[Expertise], [t1].[FullName], [t1].[IsActive], [t1].[UpdatedAt], [t1].[UserId], [a0].[Id], [a0].[AppointmentId], [a0].[BarberServiceId], [a0].[DurationMinutes], [a0].[Price], [a0].[ServiceName]
+      FROM (
+          SELECT TOP(@__p_1) [a].[Id], [a].[AppointmentDate], [a].[BarberShopId], [a].[CancellationReason], [a].[CancelledAt], [a].[CompletedAt], [a].[CreatedAt], [a].[CustomerNote], [a].[CustomerUserId], [a].[DeletedAt], [a].[EndTime], [a].[StaffMemberId], [a].[StartTime], [a].[Status], [a].[TotalDurationMinutes], [a].[TotalPrice], [a].[UpdatedAt]
+          FROM [Appointments] AS [a]
+          WHERE [a].[DeletedAt] IS NULL AND [a].[CustomerUserId] = @__userId_0
+          ORDER BY [a].[AppointmentDate] DESC, [a].[StartTime] DESC
+      ) AS [t]
+      INNER JOIN (
+          SELECT [b].[Id], [b].[Address], [b].[AverageRating], [b].[City], [b].[CoverImageUrl], [b].[CreatedAt], [b].[DeletedAt], [b].[Description], [b].[District], [b].[Email], [b].[IsActive], [b].[IsApproved], [b].[Latitude], [b].[LogoUrl], [b].[Longitude], [b].[Name], [b].[OwnerUserId], [b].[PhoneNumber], [b].[ReviewCount], [b].[StartingPrice], [b].[UpdatedAt]
+          FROM [BarberShops] AS [b]
+          WHERE [b].[DeletedAt] IS NULL
+      ) AS [t0] ON [t].[BarberShopId] = [t0].[Id]
+      LEFT JOIN (
+          SELECT [s].[Id], [s].[AvatarUrl], [s].[AverageRating], [s].[BarberShopId], [s].[Bio], [s].[CreatedAt], [s].[DeletedAt], [s].[Expertise], [s].[FullName], [s].[IsActive], [s].[UpdatedAt], [s].[UserId]
+          FROM [StaffMembers] AS [s]
+          WHERE [s].[DeletedAt] IS NULL
+      ) AS [t1] ON [t].[StaffMemberId] = [t1].[Id]
+      LEFT JOIN [AppointmentServices] AS [a0] ON [t].[Id] = [a0].[AppointmentId]
+      ORDER BY [t].[AppointmentDate] DESC, [t].[StartTime] DESC, [t].[Id], [t0].[Id], [t1].[Id]
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (2ms) [Parameters=[@__p_1='?' (DbType = Int32), @__userId_0='?' (DbType = Guid)], CommandType='Text', CommandTimeout='30']
+      SELECT TOP(@__p_1) [n].[Id], [n].[Title], [n].[Message], [n].[Type], [n].[IsRead], [n].[CreatedAt]
+      FROM [Notifications] AS [n]
+      WHERE [n].[UserId] = @__userId_0
+      ORDER BY [n].[CreatedAt] DESC
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (9ms) [Parameters=[@__userId_0='?' (DbType = Guid)], CommandType='Text', CommandTimeout='30']
+      SELECT [n].[Id], [n].[CreatedAt], [n].[DataJson], [n].[IsRead], [n].[Message], [n].[Title], [n].[Type], [n].[UserId]
+      FROM [Notifications] AS [n]
+      WHERE [n].[UserId] = @__userId_0 AND [n].[IsRead] = CAST(0 AS bit)
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (7ms) [Parameters=[@p1='?' (DbType = Guid), @p0='?' (DbType = Boolean)], CommandType='Text', CommandTimeout='30']
+      SET IMPLICIT_TRANSACTIONS OFF;
+      SET NOCOUNT ON;
+      UPDATE [Notifications] SET [IsRead] = @p0
+      OUTPUT 1
+      WHERE [Id] = @p1;
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (1ms) [Parameters=[@__p_1='?' (DbType = Int32), @__userId_0='?' (DbType = Guid)], CommandType='Text', CommandTimeout='30']
+      SELECT TOP(@__p_1) [n].[Id], [n].[Title], [n].[Message], [n].[Type], [n].[IsRead], [n].[CreatedAt]
+      FROM [Notifications] AS [n]
+      WHERE [n].[UserId] = @__userId_0
+      ORDER BY [n].[CreatedAt] DESC
